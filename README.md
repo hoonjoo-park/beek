@@ -11,11 +11,7 @@ npm install beek
 ## Usage
 
 ```js
-import { multiply } from 'beek';
-
 // ...
-
-const result = await multiply(3, 7);
 ```
 
 ## Contributing
