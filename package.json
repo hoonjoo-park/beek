@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "example": "yarn workspace beek-example",
+    "example-ios": "yarn example ios --simulator=\"iPhone 14 Pro\"",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
