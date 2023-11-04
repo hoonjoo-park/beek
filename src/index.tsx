@@ -6,16 +6,16 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const Beek = NativeModules.Beek
-  ? NativeModules.Beek
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+const AlterNativeModule = new Proxy(
+  {},
+  {
+    get() {
+      throw new Error(LINKING_ERROR);
+    },
+  }
+);
+
+const Beek = NativeModules.Beek ?? AlterNativeModule;
 
 export function multiply(a: number, b: number): Promise<number> {
   return Beek.multiply(a, b);
