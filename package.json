@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "example": "yarn workspace beek-example",
+    "example-reset-ios": "cd example/ios && rm -rf Pods Podfile.lock && pod install && cd ../..",
     "example-ios": "yarn example ios --simulator=\"iPhone 14 Pro\"",
     "test": "jest",
     "typecheck": "tsc --noEmit",
