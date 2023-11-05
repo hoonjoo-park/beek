@@ -8,17 +8,11 @@ import {
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
-import { multiply } from 'beek';
+import { openScanner } from 'beek';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
-
   const onPressScanButton = () => {
-    console.log(result);
+    openScanner();
   };
 
   return (
@@ -37,6 +31,7 @@ type Style = {
   title: TextStyle;
   scanButton: ViewStyle;
   buttonText: TextStyle;
+  nativeTitleView: ViewStyle;
 };
 
 const styles = StyleSheet.create<Style>({
@@ -64,5 +59,10 @@ const styles = StyleSheet.create<Style>({
     fontSize: 17,
     fontWeight: '500',
     color: '#fff',
+  },
+  nativeTitleView: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'red',
   },
 });

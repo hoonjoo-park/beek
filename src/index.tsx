@@ -16,7 +16,14 @@ const AlterNativeModule = new Proxy(
 );
 
 const Beek = NativeModules.Beek ?? AlterNativeModule;
+const { BeekBarcodeScanner } = NativeModules;
 
 export function multiply(a: number, b: number): Promise<number> {
   return Beek.multiply(a, b);
 }
+
+export const openScanner = () => {
+  BeekBarcodeScanner.openScanner();
+};
+
+export { default as BeekTitleView } from './BeekTitleView';
