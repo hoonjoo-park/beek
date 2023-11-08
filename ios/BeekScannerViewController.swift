@@ -5,9 +5,9 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
     
-    let customNavBar = UIView()
+    let navBar = UIView()
     let closeButton = UIButton()
-    let closeImage = UIImageView(image: UIImage(systemName: "xmark"))
+    let closeIcon = UIImageView(image: UIImage(named: "close"))
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -22,6 +22,12 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureAVCaptureSession()
+        configureViewController()
+        configureNavigationBar()
+    }
+    
+    private func configureAVCaptureSession() {
         captureSession = AVCaptureSession()
         
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
@@ -58,39 +64,46 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
         
-        captureSession.startRunning()
-        
-        configureViewController()
+        DispatchQueue.global(qos: .background).async {
+            self.captureSession.startRunning()
+        }
     }
     
     private func configureViewController() {
-        [customNavBar].forEach { self.view.addSubview($0)}
-        customNavBar.addSubview(closeButton)
-        closeButton.addSubview(closeImage)
-        
-        closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
-        closeImage.tintColor = .white
-        
         view.backgroundColor = .black
+    }
+    
+    private func configureNavigationBar() {
+        let window = UIApplication.shared.windows.first
+        let insetTop = window?.safeAreaInsets.top ?? 0
         
-        customNavBar.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-        customNavBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(navBar)
+        navBar.addSubview(closeButton)
+        navBar.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        
+        closeButton.addSubview(closeIcon)
+        closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
+        
+        navBar.translatesAutoresizingMaskIntoConstraints = false
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeImage.translatesAutoresizingMaskIntoConstraints = false
+        closeIcon.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            customNavBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            customNavBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            customNavBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            customNavBar.heightAnchor.constraint(equalToConstant: 50),
+            navBar.topAnchor.constraint(equalTo: view.topAnchor),
+            navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            navBar.heightAnchor.constraint(equalToConstant: 44 + view.safeAreaInsets.top + insetTop),
             
-            closeButton.leadingAnchor.constraint(equalTo: customNavBar.leadingAnchor, constant: 20),
-            closeButton.topAnchor.constraint(equalTo: customNavBar.topAnchor),
-            closeButton.bottomAnchor.constraint(equalTo: customNavBar.bottomAnchor),
+            closeButton.topAnchor.constraint(equalTo: navBar.topAnchor),
+            closeButton.bottomAnchor.constraint(equalTo: navBar.bottomAnchor),
+            closeButton.widthAnchor.constraint(equalToConstant: 50),
+            closeButton.leadingAnchor.constraint(equalTo: navBar.leadingAnchor, constant: 15),
             
-            closeImage.centerXAnchor.constraint(equalTo: closeButton.centerXAnchor),
-            closeImage.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
+            closeIcon.centerXAnchor.constraint(equalTo: closeButton.centerXAnchor),
+            closeIcon.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor, constant: insetTop / 2)
         ])
+        
+        
     }
     
     @objc private func dismissViewController() {
