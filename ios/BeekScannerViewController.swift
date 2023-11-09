@@ -8,6 +8,7 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
     let navBar = UIView()
     let closeButton = UIButton()
     let closeIcon = UIImageView(image: UIImage(named: "close"))
+    let scanningBox = UIView()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -23,8 +24,8 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
         super.viewDidLoad()
         
         configureAVCaptureSession()
-        configureViewController()
         configureNavigationBar()
+        configureViewController()
     }
     
     private func configureAVCaptureSession() {
@@ -70,7 +71,20 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
     }
     
     private func configureViewController() {
+        view.addSubview(scanningBox)
         view.backgroundColor = .black
+        
+        scanningBox.translatesAutoresizingMaskIntoConstraints = false
+        scanningBox.layer.cornerRadius = 12
+        scanningBox.layer.borderWidth = 5
+        scanningBox.layer.borderColor = UIColor(r: 255, g: 85, b: 0, a: 1).cgColor
+        
+        NSLayoutConstraint.activate([
+            scanningBox.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scanningBox.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scanningBox.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.4),
+            scanningBox.heightAnchor.constraint(equalTo: scanningBox.widthAnchor, multiplier: 0.5),
+        ])
     }
     
     private func configureNavigationBar() {
