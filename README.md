@@ -11,7 +11,7 @@ npm install beek
 ## Usage
 
 ```js
-// ...
+import { openScanner } from 'beek'
 ```
 
 ## Contributing
