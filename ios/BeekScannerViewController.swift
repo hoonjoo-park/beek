@@ -10,15 +10,18 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
     let closeIcon = UIImageView(image: UIImage(named: "close"))
     let scanningBox = UIView()
     
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         
         self.modalPresentationStyle = .fullScreen
     }
     
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +30,7 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
         configureNavigationBar()
         configureViewController()
     }
+    
     
     private func configureAVCaptureSession() {
         captureSession = AVCaptureSession()
@@ -69,31 +73,16 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
             self.captureSession.startRunning()
         }
     }
-    
-    private func configureViewController() {
-        view.addSubview(scanningBox)
-        view.backgroundColor = .black
-        
-        scanningBox.translatesAutoresizingMaskIntoConstraints = false
-        scanningBox.layer.cornerRadius = 12
-        scanningBox.layer.borderWidth = 5
-        scanningBox.layer.borderColor = UIColor(r: 255, g: 85, b: 0, a: 1).cgColor
-        
-        NSLayoutConstraint.activate([
-            scanningBox.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            scanningBox.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scanningBox.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.4),
-            scanningBox.heightAnchor.constraint(equalTo: scanningBox.widthAnchor, multiplier: 0.5),
-        ])
-    }
+
     
     private func configureNavigationBar() {
         let window = UIApplication.shared.windows.first
         let insetTop = window?.safeAreaInsets.top ?? 0
         
         view.addSubview(navBar)
+        
         navBar.addSubview(closeButton)
-        navBar.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        navBar.backgroundColor = UIColor(r: 0, g: 0, b: 0, a: 0.5)
         
         closeButton.addSubview(closeIcon)
         closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
@@ -116,13 +105,31 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
             closeIcon.centerXAnchor.constraint(equalTo: closeButton.centerXAnchor),
             closeIcon.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor, constant: insetTop / 2)
         ])
-        
-        
     }
+    
+    
+    private func configureViewController() {
+        view.addSubview(scanningBox)
+        view.backgroundColor = .black
+        
+        scanningBox.translatesAutoresizingMaskIntoConstraints = false
+        scanningBox.layer.cornerRadius = 12
+        scanningBox.layer.borderWidth = 5
+        scanningBox.layer.borderColor = UIColor(r: 255, g: 85, b: 0, a: 1).cgColor
+        
+        NSLayoutConstraint.activate([
+            scanningBox.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scanningBox.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scanningBox.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.4),
+            scanningBox.heightAnchor.constraint(equalTo: scanningBox.widthAnchor, multiplier: 0.5),
+        ])
+    }
+    
     
     @objc private func dismissViewController() {
         self.dismiss(animated: true, completion: nil)
     }
+    
     
     func failed() {
         let alert = UIAlertController(title: "Scanning Failed", message: "Please Try Again.", preferredStyle: .alert)
