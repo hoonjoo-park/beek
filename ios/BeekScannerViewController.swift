@@ -9,6 +9,7 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
     let closeButton = UIButton()
     let closeIcon = UIImageView(image: UIImage(named: "close"))
     let scanningBox = UIView()
+    let backgroundView = UIView()
     
     
     init() {
@@ -27,8 +28,14 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
         super.viewDidLoad()
         
         configureAVCaptureSession()
-        configureNavigationBar()
         configureViewController()
+        configureNavigationBar()
+    }
+    
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateMask()
     }
     
     
@@ -109,10 +116,14 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
     
     
     private func configureViewController() {
+        view.addSubview(backgroundView)
         view.addSubview(scanningBox)
+        
         view.backgroundColor = .black
+        backgroundView.backgroundColor = UIColor(r: 0, g: 0, b: 0, a: 0.5)
         
         scanningBox.translatesAutoresizingMaskIntoConstraints = false
+        scanningBox.backgroundColor = .clear
         scanningBox.layer.cornerRadius = 12
         scanningBox.layer.borderWidth = 5
         scanningBox.layer.borderColor = UIColor(r: 255, g: 85, b: 0, a: 1).cgColor
@@ -123,6 +134,23 @@ class BeekScannerViewController: UIViewController, AVCaptureMetadataOutputObject
             scanningBox.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.4),
             scanningBox.heightAnchor.constraint(equalTo: scanningBox.widthAnchor, multiplier: 0.5),
         ])
+    }
+    
+    
+    private func updateMask() {
+        backgroundView.frame = view.layer.bounds
+        
+        let maskLayer = CAShapeLayer()
+        let path = CGMutablePath()
+        let maskRect = scanningBox.frame
+
+        path.addRect(view.bounds)
+        path.addRoundedRect(in: maskRect, cornerWidth: scanningBox.layer.cornerRadius, cornerHeight: scanningBox.layer.cornerRadius)
+
+        maskLayer.path = path
+        maskLayer.fillRule = .evenOdd
+
+        backgroundView.layer.mask = maskLayer
     }
     
     
